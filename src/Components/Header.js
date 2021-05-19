@@ -37,7 +37,7 @@ if(isLogged === true) {
     return (
         <>
             <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
-            <Navbar.Brand href="#home" className="pageTitle" style={{color: '#a39f82'}}>
+            <Navbar.Brand href="/" className="pageTitle" style={{color: '#a39f82'}}>
                 <img
                 alt="Tenpenny logo"
                 src={tenpennyLogo}
@@ -45,13 +45,13 @@ if(isLogged === true) {
                 height="30"
                 className="d-inline-block align-top"
                 />{' '}
-                TENPENNY
+                <span style={{color: '#d7d7d7'}}>TEN</span>PENNY
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">About</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/about">About</Nav.Link>
             <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={handleShowProfile}>Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -78,7 +78,7 @@ if(isLogged === true) {
         return (
             <>
             <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
-            <Navbar.Brand href="#home" className="pageTitle" style={{color: '#a39f82'}}>
+            <Navbar.Brand href="/" className="pageTitle" style={{color: '#a39f82'}}>
                 <img
                 alt="Tenpenny logo"
                 src={tenpennyLogo}
@@ -86,13 +86,13 @@ if(isLogged === true) {
                 height="30"
                 className="d-inline-block align-top"
                 />{' '}
-                TENPENNY
+                <span style={{color: '#d7d7d7'}}>TEN</span>PENNY
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">About</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/about">About</Nav.Link>
             <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={handleShowLogin}>Log In</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleShowRegister}>Register</NavDropdown.Item>
