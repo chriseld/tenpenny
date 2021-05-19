@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
-html {
+html, .app {
     background-color: #a39f82;
     background-image: URL('./assets/exclusive-paper.png');
     background-repeat: repeat;
