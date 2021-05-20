@@ -33,8 +33,27 @@ function logout() {
     handleCloseLogin();
 }
 
-if(isLogged === true) {
-    return (
+function dropdownDisplay() {
+    if(isLogged === true) {
+        return(
+            <>
+            <NavDropdown.Item onClick={handleShowProfile}>Profile</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={(()=> logout())}>Log Out</NavDropdown.Item>
+            </>
+        )
+    } else {
+        return(
+            <>
+            <NavDropdown.Item onClick={handleShowLogin}>Log In</NavDropdown.Item>
+            <NavDropdown.Item onClick={handleShowRegister}>Register</NavDropdown.Item>
+            </>
+        )
+    }
+}
+
+
+return (
         <>
             <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
             <Navbar.Brand href="/" className="pageTitle" style={{color: '#a39f82'}}>
@@ -53,49 +72,7 @@ if(isLogged === true) {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
             <NavDropdown title="Account" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={handleShowProfile}>Profile</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={(()=> logout())}>Log Out</NavDropdown.Item>
-            </NavDropdown>
-            </Nav>
-            </Navbar.Collapse>
-            </Navbar>
-
-             <Modal show={profile} onHide={handleCloseProfile}>
-                <Modal.Header>
-                    <Modal.Title>Log In</Modal.Title>
-                </Modal.Header>
-                <Modal.Body><ProfileForm /></Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseProfile}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-             </Modal>
-        </>
-    )
-    } else {
-        return (
-            <>
-            <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
-            <Navbar.Brand href="/" className="pageTitle" style={{color: '#a39f82'}}>
-                <img
-                alt="Tenpenny logo"
-                src={tenpennyLogo}
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-                />{' '}
-                <span style={{color: '#d7d7d7'}}>TEN</span>PENNY
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
-            <NavDropdown title="Account" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={handleShowLogin}>Log In</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleShowRegister}>Register</NavDropdown.Item>
+                {dropdownDisplay()}
             </NavDropdown>
             </Nav>
             </Navbar.Collapse>
@@ -137,8 +114,7 @@ if(isLogged === true) {
                 </Modal.Footer>
              </Modal>
         </>
-        )
-    }
+    )
 }
 
 export default Header
