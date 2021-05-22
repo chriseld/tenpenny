@@ -5,6 +5,12 @@ import axios from 'axios';
 
 import store from '../Components/store';
 
+import jwt_decode from "jwt-decode";
+
+// import { decode } from './JWTModule';
+
+const jwt = require('jsonwebtoken');
+
 async function validateLoginEmail(value) {
     let error;
 
@@ -61,24 +67,38 @@ function getUserrole(user) {
     }
 }
 
+function getLogin(user) {
+  return {
+      type: 'getLogin',
+      payload: user
+  }
+}
 
 async function loginUser(values) {
 
     const email = values.email;
     const password = values.password;
+    let user = "";
 
-    const user = await axios.get('http://localhost:9000/getuserbyemail?email=' + email);
+    const token = await axios.get('http://localhost:9000/getuserbyemail?email=' + email);
+    if(token.data !== "User not found"){
+      user = jwt_decode(token.data);
+    } else {
+      user = "";
+    }
 
-    if(user.data !== "User not found") {
-        const validated = await axios.get('http://localhost:9000/passwordcompare?password=' + password + '&hash=' + user.data.password);
+    if(token.data !== "User not found") {
+        const validated = await axios.get('http://localhost:9000/passwordcompare?password=' + password + '&hash=' + user.userpwd);
         if(validated.data === true) {
-            await axios.get('http://localhost:9000/loginuser?idusers=' + user.data.idusers);
+            const logit = await axios.get('http://localhost:9000/loginuser?idusers=' + user.userid);
             store.dispatch(stateLogin());
-            // getUser(user);
-            store.dispatch(getUsername(user.data.username));
-            store.dispatch(getUserid(user.data.idusers));
-            store.dispatch(getUseremail(user.data.email));
-            store.dispatch(getUserrole(user.data.role));
+            store.dispatch(getLogin(true));
+            store.dispatch(getUsername(user.username));
+            store.dispatch(getUserid(user.userid));
+            store.dispatch(getUseremail(user.useremail));
+            store.dispatch(getUserrole(user.userrole));
+
+            localStorage.setItem("userToken", token.data);
 
         } else {
             alert("Email or password invalid");

@@ -31,6 +31,7 @@ const handleShowProfile = () => setProfile(true);
 function logout() {
     dispatch({type:'LOG_OUT'});
     handleCloseLogin();
+    localStorage.removeItem('userToken');
 }
 
 function dropdownDisplay() {

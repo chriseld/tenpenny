@@ -25,3 +25,6 @@ yarn-error.log*
 
 DbConnection.js
 mailConnection.js
+
+public.key
+private.key
