@@ -13,3 +13,9 @@ body {
 .pageTitle {
     font-family: 'Alfa Slab One', cursive;
 }
+
+.Card {
+    Width: 200px;
+    background-color: #D7D7D7;
+    box-shadow: 5px 5px 15px 2px rgba(0,0,0,0.69);
+}

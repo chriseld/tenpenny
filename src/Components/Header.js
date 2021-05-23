@@ -12,6 +12,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+import JWTDecode from './JWTDecode';
+
 function Header() {
 
 const isLogged = useSelector(state => state.isLogged);
@@ -56,6 +58,7 @@ function dropdownDisplay() {
 
 return (
         <>
+            <JWTDecode />
             <Navbar bg="dark" expand="lg" variant="dark" fixed="top">
             <Navbar.Brand href="/" className="pageTitle" style={{color: '#a39f82'}}>
                 <img

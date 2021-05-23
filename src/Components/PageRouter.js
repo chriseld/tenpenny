@@ -8,6 +8,7 @@ import {
 
 import PageHome from './PageHome';
 import PageAbout from './PageAbout';
+import PageNewBook from './PageNewBook';
 
 function PageRouter() {
     return (
@@ -19,6 +20,9 @@ function PageRouter() {
                 </Route>
                 <Route path="/about">
                     <PageAbout />
+                </Route>
+                <Route path="/newbook">
+                    <PageNewBook />
                 </Route>
                 </Switch>
             </Router>
