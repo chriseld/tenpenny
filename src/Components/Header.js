@@ -11,6 +11,8 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Dropdown, Form } from 'react-bootstrap';
+import { DropdownButton } from 'react-bootstrap';
 
 import JWTDecode from './JWTDecode';
 
@@ -81,13 +83,14 @@ return (
             </Nav>
             </Navbar.Collapse>
             </Navbar>
+            
 
             <Modal show={login} onHide={handleCloseLogin}>
-                <Modal.Header>
+                <Modal.Header Style="background-color: #d7d7d7">
                     <Modal.Title>Log In</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><LoginForm /></Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer Style="background-color: #d7d7d7">
                     <Button variant="secondary" onClick={handleCloseLogin}>
                         Close
                     </Button>
@@ -95,11 +98,11 @@ return (
              </Modal>
 
              <Modal show={register} onHide={handleCloseRegister}>
-                <Modal.Header>
+                <Modal.Header Style="background-color: #d7d7d7">
                     <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><RegisterForm /></Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer Style="background-color: #d7d7d7">
                     <Button variant="secondary" onClick={handleCloseRegister}>
                         Close
                     </Button>
@@ -107,11 +110,11 @@ return (
              </Modal>
 
              <Modal show={profile} onHide={handleCloseProfile}>
-                <Modal.Header>
-                    <Modal.Title>Log In</Modal.Title>
+                <Modal.Header Style="background-color: #d7d7d7">
+                    <Modal.Title>Profile</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><ProfileForm /></Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer Style="background-color: #d7d7d7">
                     <Button variant="secondary" onClick={handleCloseProfile}>
                         Close
                     </Button>

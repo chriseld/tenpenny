@@ -19,3 +19,19 @@ body {
     background-color: #D7D7D7;
     box-shadow: 5px 5px 15px 2px rgba(0,0,0,0.69);
 }
+
+.search {
+    justify-content: right;
+}
+
+.newBookForm {
+    max-width: 900px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.newBookBtn {
+    border-radius: 8px;
+    border: 2px solid black;
+    background-color: #D7D7D7;
+}
