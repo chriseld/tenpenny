@@ -19,16 +19,22 @@ var mailerRouter = require('./routes/mailer');
 var updateuseremailRouter = require('./routes/updateuseremail');
 var updateuserpasswordRouter = require('./routes/updateuserpassword');
 var forgotpasswordRouter = require('./routes/forgotpassword');
+var addBookRouter = require('./routes/addbook');
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(express.urlencoded({
+  parameterLimit: 100000,
+  extended: false,
+  limit: '50mb'
+}));
+app.use(express.json({ limit: '50mb', type: 'application/json' }));
+
 app.use(logger('dev'));
-app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -45,6 +51,7 @@ app.use('/mailer', mailerRouter);
 app.use('/updateuseremail', updateuseremailRouter);
 app.use('/updateuserpassword', updateuserpasswordRouter);
 app.use('/forgotpassword', forgotpasswordRouter);
+app.use('/addbook', addBookRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

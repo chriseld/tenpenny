@@ -1,16 +1,63 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import { Formik } from 'formik';
 import { Form, DropZone, Input, Textarea, SubmitBtn } from 'react-formik-ui';
 
+let encodedCover = "";
+
+async function SubmitBook(data) {
+    const authid = data.authorId;
+    const title = data.bookTitle;
+    const blurb = data.bookBlurb;
+    const cover = encodedCover;
+    await axios.post('http://localhost:9000/addbook', {
+        authid: authid,
+        title: title,
+        blurb: blurb,
+        cover: cover
+      })
+};
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '');
+        if ((encoded.length % 4) > 0) {
+          encoded += '='.repeat(4 - (encoded.length % 4));
+        }
+        encodedCover = encoded;
+        resolve(encoded);
+      };
+      reader.onerror = error => reject(error);
+    });
+}
+
 function PageNewBook() {
-    const maxSize = 5242880;
+    const isLogged = useSelector(state => state.isLogged);
+    const userid = useSelector(state => state.userid);
+    const username = useSelector(state => state.username);
+    const maxSize = 10485760;
+    const acceptedFiles = {};
+
+    if(isLogged) {
     return(
         <div className="newBookForm">
+            <h4>Author: {username}</h4>
             <Formik
                 initialValues={{
-                    coverFile: []
+                    authorId: userid,
+                    bookTitle: "",
+                    bookBlurb: "",
+                    bookCover: {}
                 }}
-            onSubmit={data => (alert(JSON.stringify(data)))}
+            onSubmit={
+                data => (
+                    SubmitBook(data)
+                )
+            }
             >
             <Form styling='structure'>
 
@@ -21,6 +68,7 @@ function PageNewBook() {
                 placeholder='Enter the title'
                 required={true}
                 size='50'
+                value=''
             />
 
             <Textarea
@@ -41,20 +89,24 @@ function PageNewBook() {
                 multiple={false}
                 required={true}
                 maxSize={maxSize}
-                withClearButton='true'
                 onDropRejected={() =>{
                     alert("File rejected. Please upload a suitable file.")
                 }}
+                onDropAccepted={(acceptedFiles) => getBase64(acceptedFiles[0])}
             >
 
             </DropZone>
+
+            <br />
 
             <SubmitBtn className='newBookBtn' text="Submit"/>
 
             </Form>
             </Formik>
         </div>
-    )
+    )} else {
+        window.location.replace("/")
+    }
 }
 
 export default PageNewBook
