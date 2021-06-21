@@ -11,12 +11,16 @@ async function SubmitBook(data) {
     const title = data.bookTitle;
     const blurb = data.bookBlurb;
     const cover = encodedCover;
-    await axios.post('http://localhost:9000/addbook', {
+    let bookid = 0;
+    bookid = await axios.post('http://localhost:9000/addbook', {
         authid: authid,
         title: title,
         blurb: blurb,
         cover: cover
-      })
+      }).then(function (response) {
+        alert("Your book has been created! Please add a chapter so that we can display it :)");
+        window.location.replace('/book?id=' + response.data.insertId);
+      });
 };
 
 function getBase64(file) {
