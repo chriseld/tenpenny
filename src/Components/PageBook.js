@@ -12,7 +12,7 @@ function LoggedIn() {
     if(isLogged === true) {
         console.log(values) // "top""
         return(
-        <p>here. book id = {values.id}</p>
+        <p>here. book id is {values.id}</p>
         )
     }
 }
