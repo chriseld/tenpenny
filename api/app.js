@@ -20,6 +20,8 @@ var updateuseremailRouter = require('./routes/updateuseremail');
 var updateuserpasswordRouter = require('./routes/updateuserpassword');
 var forgotpasswordRouter = require('./routes/forgotpassword');
 var addBookRouter = require('./routes/addbook');
+var getBookByIdRouter = require('./routes/getbookbyid');
+var getChaptersByBookIdRouter = require('./routes/getchaptersbybookid');
 var app = express();
 
 // view engine setup
@@ -52,6 +54,8 @@ app.use('/updateuseremail', updateuseremailRouter);
 app.use('/updateuserpassword', updateuserpasswordRouter);
 app.use('/forgotpassword', forgotpasswordRouter);
 app.use('/addbook', addBookRouter);
+app.use('/getbookbyid', getBookByIdRouter);
+app.use('/getchaptersbybookid', getChaptersByBookIdRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

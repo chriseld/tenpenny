@@ -18,6 +18,7 @@ async function SubmitBook(data) {
         blurb: blurb,
         cover: cover
       }).then(function (response) {
+        console.log(cover);
         alert("Your book has been created! Please add a chapter so that we can display it :)");
         window.location.replace('/book?id=' + response.data.insertId);
       });
@@ -25,26 +26,23 @@ async function SubmitBook(data) {
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '');
-        if ((encoded.length % 4) > 0) {
-          encoded += '='.repeat(4 - (encoded.length % 4));
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file)
+        fileReader.onload = () => {
+            const x = btoa(fileReader.result);
+          encodedCover = x;
+          console.log(encodedCover);
         }
-        encodedCover = encoded;
-        resolve(encoded);
-      };
-      reader.onerror = error => reject(error);
-    });
+        fileReader.onerror = (error) => {
+          console.log(error);
+        }
+    })
 }
 
 function PageNewBook() {
     const isLogged = useSelector(state => state.isLogged);
     const userid = useSelector(state => state.userid);
     const username = useSelector(state => state.username);
-    const maxSize = 10485760;
-    const acceptedFiles = {};
 
     if(isLogged) {
     return(
@@ -69,6 +67,7 @@ function PageNewBook() {
                 name='bookTitle'
                 className='newBookTitle'
                 label="Title"
+                autocomplete="off"
                 placeholder='Enter the title'
                 required={true}
                 size='50'
@@ -88,13 +87,13 @@ function PageNewBook() {
             <DropZone
                 name='bookCover'
                 label='Cover upload'
-                placeholder='Upload your cover image (.PNG only, ideal dimensions: 1600px w, 2400px h). Maximum file size: 5MB'
-                accept="image/png"
+                placeholder='Upload your cover image (.JPEG and .PNG only, ideal dimensions: 800px w, 1200px h). Maximum file size: 3MB'
+                accept="image/png, image/jpeg, image/jpg"
                 multiple={false}
                 required={true}
-                maxSize={maxSize}
-                onDropRejected={() =>{
-                    alert("File rejected. Please upload a suitable file.")
+                maxSize={3145728}
+                onDropRejected={() => {
+                    alert("File Rejected! Please upload a suitable file.")
                 }}
                 onDropAccepted={(acceptedFiles) => getBase64(acceptedFiles[0])}
             >
