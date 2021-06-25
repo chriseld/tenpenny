@@ -18,7 +18,6 @@ async function SubmitBook(data) {
         blurb: blurb,
         cover: cover
       }).then(function (response) {
-        console.log(cover);
         alert("Your book has been created! Please add a chapter so that we can display it :)");
         window.location.replace('/book?id=' + response.data.insertId);
       });
@@ -31,7 +30,6 @@ function getBase64(file) {
         fileReader.onload = () => {
             const x = btoa(fileReader.result);
           encodedCover = x;
-          console.log(encodedCover);
         }
         fileReader.onerror = (error) => {
           console.log(error);

@@ -7,9 +7,15 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 let book;
 let cover;
+let blurb;
+let userid;
+let authid;
+let authname;
 let chapters;
 
 async function getBook(id) {
@@ -17,15 +23,24 @@ async function getBook(id) {
         }).then(function (response) {
             cover = new Buffer.from(response.data[0].cover.data).toString();
             cover = atob(cover);
-            console.log(cover);
             document.getElementById("coverImg").src = cover;
+            blurb = response.data[0].blurb;
+            document.getElementById("content").innerHTML = blurb;
+            authid = response.data[0].idauthor;
+            document.getElementById("authid").innerHTML = authid;
+            authname = response.data[0].username;
+            document.getElementById("authorname").innerHTML = "by: " + authname;
+            if(authid === userid) {
+                document.getElementById("authorpanel").style = "display: block";
+            } else {
+                document.getElementById("authorpanel").style = "display: none";
+            }
       });
 }
 
 async function getChapters(id) {
     chapters = await axios.get('http://localhost:9000/getchaptersbybookid?id=' + id, {
     }).then(function (response) {
-    console.log(response.data);
   });
 }
 
@@ -34,33 +49,37 @@ function LoggedIn() {
     const values = queryString.parse(search)
 
     const isLogged = useSelector(state => state.isLogged);
+    userid = useSelector(state => state.userid);
 
-    if(isLogged === true) {
-        console.log(values);
-        getBook(values.id);
-        getChapters(values.id);
+    getBook(values.id);
+    getChapters(values.id);
+
         return(
-        // <p>here. book id is {values.id}</p>
             <Container>
                 <Row>
                     <Col xs={3}>
-                        <p>Sidebar</p>
-                        <Card>
-                            <Card.Img id="coverImg" variant="top" src={"" + cover} />
+                        <Card Style="width: 200px;">
+                            <Card.Img id="coverImg" variant="top" />
+                            <div id="authorname"></div>
+                        </Card>
+
+                        <Card id="authorpanel" Style="width: 200px; align-items: center;">
+                            <Button id="editbook">Edit Book</Button>
+                            <Button id="addchapter">Add Chapter</Button>
                         </Card>
                     </Col>
                     <Col xs={9}>
-                        <p>main content</p>
+                        <div id="content" />
                     </Col>
                 </Row>
             </Container>
         )
     }
-}
 
 function PageBook() {
     return (
         <>
+            <div id="authid" Style="display: none;"></div>
             <LoggedIn />
         </>
     )

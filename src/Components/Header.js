@@ -36,6 +36,7 @@ function logout() {
     dispatch({type:'LOG_OUT'});
     handleCloseLogin();
     localStorage.removeItem('userToken');
+    window.location.replace("/");
 }
 
 function dropdownDisplay() {

@@ -14,7 +14,7 @@ body {
     font-family: 'Alfa Slab One', cursive;
 }
 
-.Card {
+.Card, .card {
     Width: 200px;
     background-color: #D7D7D7;
     box-shadow: 5px 5px 15px 2px rgba(0,0,0,0.69);
@@ -34,4 +34,19 @@ body {
     border-radius: 8px;
     border: 2px solid black;
     background-color: #D7D7D7;
+}
+
+.btn {
+    border-radius: 8px;
+    border: 2px solid #D7D7D7;
+    background-color: black;
+}
+
+#authorpanel {
+    margin-top: 15px;
+}
+
+#authorpanel Button {
+    width: 100%;
+    height: 35px;
 }
