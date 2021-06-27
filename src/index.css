@@ -46,7 +46,19 @@ body {
     margin-top: 15px;
 }
 
-#authorpanel Button {
+#authorpanel a {
     width: 100%;
     height: 35px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    border: 2px solid #D7D7D7;
+    background-color: black;
+    color: #d7d7d7;
+}
+
+#authorpanel a:hover {
+    background-color: #d7d7d7;
+    border: 2px solid black;
+    color: black;
 }
