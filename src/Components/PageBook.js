@@ -36,7 +36,9 @@ async function getBook(id) {
             authname = response.data[0].username;
             document.getElementById("authorname").innerHTML = "by: " + authname;
             if(authid === userid) {
-                document.getElementById("authorpanel").style = "display: block";
+                 document.getElementById("authorpanel").style = "display: block";
+            } else {
+                document.getElementById("authorpanel").style = "display: none";
             }
       });
 }
