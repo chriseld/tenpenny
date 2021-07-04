@@ -23,6 +23,7 @@ var addBookRouter = require('./routes/addbook');
 var getBookByIdRouter = require('./routes/getbookbyid');
 var getChaptersByBookIdRouter = require('./routes/getchaptersbybookid');
 var getNextChapterByBookIdRouter = require('./routes/getnextchapterbybookid');
+var addNewChapterRouter = require('./routes/addnewchapter');
 var app = express();
 
 // view engine setup
@@ -58,6 +59,7 @@ app.use('/addbook', addBookRouter);
 app.use('/getbookbyid', getBookByIdRouter);
 app.use('/getchaptersbybookid', getChaptersByBookIdRouter);
 app.use('/getnextchapterbybookid', getNextChapterByBookIdRouter);
+app.use('/addnewchapter', addNewChapterRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
