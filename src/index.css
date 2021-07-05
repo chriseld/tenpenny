@@ -30,10 +30,15 @@ body {
     padding-right: 50px;
 }
 
-.newBookBtn {
+#newBookBtn {
     border-radius: 8px;
     border: 2px solid black;
     background-color: #D7D7D7;
+}
+
+#newBookBtn:hover {
+    border: 2px solid black;
+    background-color: #206d08;
 }
 
 .btn {

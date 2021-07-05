@@ -100,7 +100,7 @@ function PageNewBook() {
 
             <br />
 
-            <SubmitBtn className='newBookBtn' text="Submit"/>
+            <SubmitBtn id='newBookBtn' text="Submit"/>
 
             </Form>
             </Formik>

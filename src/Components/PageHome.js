@@ -67,6 +67,8 @@ function GetBooks() {
                 <Card.Body>
                     <Card.Title>{item.title}</Card.Title>
                     <Card.Text>
+                        <em>by {item.username}</em>
+                        <br />
                         {GetBlurb(item.blurb)}
                     </Card.Text>
                     <Button variant="dark" href={"/book?id=" + item.idbooks}>Read Book</Button>
