@@ -10,6 +10,10 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+
+import ReactQuill, {Quill} from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+
 let isLogged;
 let book;
 let bookid;
@@ -20,6 +24,7 @@ let authid;
 let authname;
 let chapters = [];
 let chapternumber;
+let quillValue;
 
 async function getBook(id) {
     book = await axios.get('http://localhost:9000/getbookbyid?id=' + id, {
@@ -89,12 +94,13 @@ function escapeHtml(unsafe) {
          .replace(/'/g, "&#039;");
  }
 
-async function submitNewChapter() {
+async function SubmitNewChapter() {
 
-    const rawText = document.getElementById("newChapterText").value;
+    const rawText = quillValue;
+    console.log(rawText);
     const rawTitle = document.getElementById("newChapterTitle").value;
     const cleanTitle = escapeHtml(rawTitle);
-    const cleanText = escapeHtml(rawText);
+    const cleanText = rawText;
 
     await axios.post('http://localhost:9000/addnewchapter?bookid=' + bookid + '&chapternum=' + chapternumber, {
         chaptertitle: cleanTitle,
@@ -113,6 +119,8 @@ function OnLoad() {
     
     const handleCloseChapter = () => setChapter(false);
     const handleShowChapter = () => setChapter(true);
+
+    const [convertedText, setConvertedText] = useState("");
 
     isLogged = useSelector(state => state.isLogged);
     userid = useSelector(state => state.userid);
@@ -152,14 +160,22 @@ function OnLoad() {
                     <Modal.Title>Chapter <span id="newChapterNum">{chapternumber}</span></Modal.Title>
                 </Modal.Header>
             <Modal.Body>
-                <input type="text" name="newChapterTitle" id="newChapterTitle" size="80" placeholder="Chapter Title" />
+                <input type="text" name="newChapterTitle" id="newChapterTitle" size="80" autocomplete="off" placeholder="Chapter Title" />
                 <br />
                 <br />
-                <textarea id="newChapterText" name="newChapterText" rows="25" cols="105" resize="none" placeholder="Chapter Text" />
+                <ReactQuill
+                    id="newChapterText"
+                    name="newChapterText"
+                    theme='snow'
+                    value={convertedText}
+                    onChange={(value)=>{quillValue=value}}
+                    style={{minHeight: '300px'}}
+                />
+                {/* <textarea id="newChapterText" name="newChapterText" rows="25" cols="105" resize="none" placeholder="Chapter Text" /> */}
                 <div id="bookid" hidden>{bookid}</div>
             </Modal.Body>
             <Modal.Footer Style="background-color: #d7d7d7">
-                <Button variant="secondary" onClick={submitNewChapter}>
+                <Button variant="secondary" onClick={SubmitNewChapter}>
                     Submit
                 </Button>
                 <Button variant="secondary" onClick={handleCloseChapter}>
