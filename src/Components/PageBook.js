@@ -24,7 +24,11 @@ let authid;
 let authname;
 let chapters = [];
 let chapternumber;
+let currentchapter;
 let quillValue;
+let idchapters;
+let chaptertitle;
+let chaptertext;
 
 async function getBook(id) {
     book = await axios.get('http://localhost:9000/getbookbyid?id=' + id, {
@@ -44,6 +48,12 @@ async function getBook(id) {
                  document.getElementById("authorpanel").style = "display: block";
             } else {
                 document.getElementById("authorpanel").style = "display: none";
+                
+            }
+            if(authid === userid && idchapters) {
+                document.getElementById("editchapterbtn").style = "display: block";
+            } else {
+                document.getElementById("editchapterbtn").style = "display: none";
             }
       });
 }
@@ -67,7 +77,7 @@ function GetChapters(id) {
     return (
       <>
         {data.map(item => (
-            <a href="#" key={item.chapternumber} onClick={ () => displayText(item.chaptertext) }>{item.chapternumber} - {item.chaptertitle}</a>
+            <a href="#" key={item.chapternumber} onClick={ () => displayText(item.chaptertitle, item.chaptertext, item.idchapters, item.chapternumber) }>{item.chapternumber} - {item.chaptertitle}</a>
         ))}
       </>
     )};
@@ -80,9 +90,16 @@ async function getChapterNumber(id) {
   });
 }
 
-function displayText(text) {
-        text = new Buffer.from(text).toString();
-        document.getElementById("content").innerHTML = text;
+function displayText(title, text, id, chapter) {
+    idchapters = id;
+    title = new Buffer.from(title).toString();
+    text = new Buffer.from(text).toString();
+    document.getElementById("content").innerHTML = text;
+
+    currentchapter = chapter;
+
+    chaptertitle = title;
+    chaptertext = text;
 }
 
 function escapeHtml(unsafe) {
@@ -111,14 +128,35 @@ async function SubmitNewChapter() {
       });
 }
 
+async function SubmitEditedChapter() {
+
+    const rawText = quillValue;
+    console.log(rawText);
+    const rawTitle = document.getElementById("editChapterTitle").value;
+    const cleanTitle = escapeHtml(rawTitle);
+    const cleanText = rawText;
+
+    await axios.post('http://localhost:9000/editchapter?idchapters=' + idchapters, {
+        chaptertitle: cleanTitle,
+        chaptertext: cleanText
+      }).then(function (response) {
+        alert("Your edits have been made!");
+        window.location.reload();
+      });
+}
+
 function OnLoad() {
     const { search } = useLocation();
     const values = queryString.parse(search);
 
     const [chapter, setChapter] = useState(false);
+    const [editchapter, setEditChapter] = useState(false);
     
     const handleCloseChapter = () => setChapter(false);
     const handleShowChapter = () => setChapter(true);
+
+    const handleCloseEditChapter = () => setEditChapter(false);
+    const handleShowEditChapter = () => setEditChapter(true);
 
     const [convertedText, setConvertedText] = useState("");
 
@@ -150,6 +188,7 @@ function OnLoad() {
                 </Col>
                 <Col xs={1} />
                 <Col xs={9}>
+                    <a id="editchapterbtn" onClick={handleShowEditChapter}>Edit Chapter</a>
                     <div id="content" />
                 </Col>
             </Row>
@@ -160,7 +199,7 @@ function OnLoad() {
                     <Modal.Title>Chapter <span id="newChapterNum">{chapternumber}</span></Modal.Title>
                 </Modal.Header>
             <Modal.Body>
-                <input type="text" name="newChapterTitle" id="newChapterTitle" size="80" autocomplete="off" placeholder="Chapter Title" />
+                <input type="text" name="newChapterTitle" id="newChapterTitle" size="80" autoComplete="off" placeholder="Chapter Title" />
                 <br />
                 <br />
                 <ReactQuill
@@ -170,8 +209,8 @@ function OnLoad() {
                     value={convertedText}
                     onChange={(value)=>{quillValue=value}}
                     style={{minHeight: '300px'}}
+                    placeholder="Chapter text here..."
                 />
-                {/* <textarea id="newChapterText" name="newChapterText" rows="25" cols="105" resize="none" placeholder="Chapter Text" /> */}
                 <div id="bookid" hidden>{bookid}</div>
             </Modal.Body>
             <Modal.Footer Style="background-color: #d7d7d7">
@@ -179,6 +218,34 @@ function OnLoad() {
                     Submit
                 </Button>
                 <Button variant="secondary" onClick={handleCloseChapter}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
+        <Modal size="lg" show={editchapter} onHide={handleCloseEditChapter}>
+                <Modal.Header Style="background-color: #d7d7d7">
+                    <Modal.Title>Edit Chapter <span id="editChapterNum">{currentchapter}</span></Modal.Title>
+                </Modal.Header>
+            <Modal.Body>
+                <input type="text" name="editChapterTitle" id="editChapterTitle" size="80" defaultValue={chaptertitle} />
+                <br />
+                <br />
+                <ReactQuill
+                    id="editChapterText"
+                    name="editChapterText"
+                    theme='snow'
+                    value={chaptertext}
+                    onChange={(value)=>{quillValue=value}}
+                    style={{minHeight: '300px'}}
+                />
+                <div id="bookid" hidden>{bookid}</div>
+            </Modal.Body>
+            <Modal.Footer Style="background-color: #d7d7d7">
+                <Button variant="secondary" onClick={SubmitEditedChapter}>
+                    Submit
+                </Button>
+                <Button variant="secondary" onClick={handleCloseEditChapter}>
                     Close
                 </Button>
             </Modal.Footer>
