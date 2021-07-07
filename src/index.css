@@ -65,7 +65,7 @@ body {
 #editchapterbtn {
     display: none;
     padding: 0 15px;
-    width: 250px;
+    width: 125px;
     min-height: 35px;
     border-radius: 8px;
     display: inline-block;
@@ -108,4 +108,30 @@ body {
     padding: 10px;
     height: 85vh;
     width: 60%;
+}
+
+#increasefontbtn, #decreasefontbtn {
+    width: 30px;
+    font-size: large;
+    min-height: 35px;
+    border-radius: 16px;
+    display: inline-block;
+    text-align: center;
+    border: 2px solid #D7D7D7;
+    background-color: black;
+    color: #d7d7d7;
+}
+
+#increasefontbtn:hover, #decreasefontbtn:hover {
+    background-color: #d7d7d7;
+    border: 2px solid black;
+    color: black;
+}
+
+/* #fontcontrols {
+    float: right;
+} */
+
+#chapterbar {
+    display: inline-block;
 }

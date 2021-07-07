@@ -51,7 +51,7 @@ async function getBook(id) {
                 
             }
             if(authid === userid && idchapters) {
-                document.getElementById("editchapterbtn").style = "display: block";
+                document.getElementById("editchapterbtn").style = "display: inline-block";
             } else {
                 document.getElementById("editchapterbtn").style = "display: none";
             }
@@ -67,7 +67,6 @@ function GetChapters(id) {
             'http://localhost:9000/getchaptersbybookid?id=' + id,
         );
         setData(chapters.data);
-        console.log(chapters.data)
       };
    
       fetchData();
@@ -145,6 +144,21 @@ async function SubmitEditedChapter() {
       });
 }
 
+function increaseFontSize() {
+    const reader = document.getElementById("content");
+    const style = window.getComputedStyle(reader, null).getPropertyValue('font-size');
+    const currentSize = parseFloat(style);
+    reader.style.fontSize = (currentSize + 5) + 'px';
+
+}
+
+function decreaseFontSize() {
+    const reader = document.getElementById("content");
+    const style = window.getComputedStyle(reader, null).getPropertyValue('font-size');
+    const currentSize = parseFloat(style);
+    reader.style.fontSize = (currentSize - 5) + 'px';
+}
+
 function OnLoad() {
     const { search } = useLocation();
     const values = queryString.parse(search);
@@ -188,7 +202,12 @@ function OnLoad() {
                 </Col>
                 <Col xs={1} />
                 <Col xs={9}>
+                    <span id="chapterbar">
                     <a id="editchapterbtn" onClick={handleShowEditChapter}>Edit Chapter</a>
+                    <span id="fontcontrols">
+                    <a id="increasefontbtn" onClick={increaseFontSize}>+</a>
+                    <a id="decreasefontbtn" onClick={decreaseFontSize}>-</a>
+                    </span></span>
                     <div id="content" />
                 </Col>
             </Row>
