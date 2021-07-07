@@ -85,3 +85,14 @@ body {
 .row {
     width: 90vw;
 }
+
+#aboutContent {
+    margin: 0 auto;
+    background-color: #D7D7D7;
+    background-image: URL('./assets/natural-paper.png');
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 10px;
+    height: 85vh;
+    width: 60%;
+}
