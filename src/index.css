@@ -65,6 +65,7 @@ body {
 #editchapterbtn {
     display: none;
     padding: 0 15px;
+    margin-left: 15px;
     width: 125px;
     min-height: 35px;
     border-radius: 8px;
@@ -87,7 +88,7 @@ body {
     border: 2px solid black;
     border-radius: 8px;
     padding: 10px;
-    height: 85vh;
+    min-height: 85vh;
 }
 
 .container {

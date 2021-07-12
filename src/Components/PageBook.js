@@ -4,6 +4,8 @@ import {render} from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import axios from 'axios';
+import { Formik } from 'formik';
+import { Form, DropZone, Input, Textarea, SubmitBtn } from 'react-formik-ui';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -29,6 +31,8 @@ let quillValue;
 let idchapters;
 let chaptertitle;
 let chaptertext;
+let booktitle;
+let encodedCover = "";
 
 async function getBook(id) {
     book = await axios.get('http://localhost:9000/getbookbyid?id=' + id, {
@@ -43,7 +47,9 @@ async function getBook(id) {
             authid = response.data[0].idauthor;
             document.getElementById("authid").innerHTML = authid;
             authname = response.data[0].username;
+            booktitle = dirtyHtml(response.data[0].title);
             document.getElementById("authorname").innerHTML = "by: " + authname;
+            // document.getElementById("editBookTitle").innerHTML = booktitle;
             if(authid === userid) {
                  document.getElementById("authorpanel").style = "display: block";
             } else {
@@ -110,6 +116,15 @@ function escapeHtml(unsafe) {
          .replace(/'/g, "&#039;");
  }
 
+ function dirtyHtml(safe) {
+     return safe
+     .replace("&amp;", "&")
+     .replace("&lt;", "<")
+     .replace("&gt;", ">")
+     .replace("&quot;", '"')
+     .replace("&#039;", "'");
+ }
+
 async function SubmitNewChapter() {
 
     const rawText = quillValue;
@@ -159,18 +174,51 @@ function decreaseFontSize() {
     reader.style.fontSize = (currentSize - 5) + 'px';
 }
 
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file)
+        fileReader.onload = () => {
+            const x = btoa(fileReader.result);
+          encodedCover = x;
+        }
+        fileReader.onerror = (error) => {
+          console.log(error);
+        }
+    })
+}
+
+function SubmitCover(file) {
+    console.log(file);
+}
+
+async function SubmitEditedTitle() {
+    const rawTitle = document.getElementById("editBookTitleInput").value;
+    const cleanTitle = escapeHtml(rawTitle);
+
+    await axios.post('http://localhost:9000/editbooktitle?idbooks=' + bookid, {
+        booktitle: cleanTitle
+      }).then(function (response) {
+        alert("Your title has been edited!");
+      });
+}
+
 function OnLoad() {
     const { search } = useLocation();
     const values = queryString.parse(search);
 
     const [chapter, setChapter] = useState(false);
     const [editchapter, setEditChapter] = useState(false);
+    const [editbook, setEditBook] = useState(false);
     
     const handleCloseChapter = () => setChapter(false);
     const handleShowChapter = () => setChapter(true);
 
     const handleCloseEditChapter = () => setEditChapter(false);
     const handleShowEditChapter = () => setEditChapter(true);
+
+    const handleCloseEditBook = () => setEditBook(false);
+    const handleShowEditBook = () => setEditBook(true);
 
     const [convertedText, setConvertedText] = useState("");
 
@@ -193,8 +241,8 @@ function OnLoad() {
                     </Card>
 
                     <Card id="authorpanel" Style="width: 200px; align-items: center;">
-                        {/* <a id="editbook">Edit Book</a> */}
-                        {/* <br /> */}
+                        <a id="editbook" onClick={handleShowEditBook}>Edit Book</a>
+                        <br />
                         <a id="addchapter" onClick={handleShowChapter}>Add Chapter</a>
                     </Card>
 
@@ -203,11 +251,12 @@ function OnLoad() {
                 <Col xs={1} />
                 <Col xs={9}>
                     <span id="chapterbar">
-                    <a id="editchapterbtn" onClick={handleShowEditChapter}>Edit Chapter</a>
                     <span id="fontcontrols">
                     <a id="increasefontbtn" onClick={increaseFontSize}>+</a>
                     <a id="decreasefontbtn" onClick={decreaseFontSize}>-</a>
-                    </span></span>
+                    </span>
+                    <a id="editchapterbtn" onClick={handleShowEditChapter}>Edit Chapter</a>
+                    </span>
                     <div id="content" />
                 </Col>
             </Row>
@@ -265,6 +314,64 @@ function OnLoad() {
                     Submit
                 </Button>
                 <Button variant="secondary" onClick={handleCloseEditChapter}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
+        <Modal size="lg" show={editbook} onHide={handleCloseEditBook}>
+                <Modal.Header Style="background-color: #d7d7d7">
+                    <Modal.Title>Edit Book</Modal.Title>
+                </Modal.Header>
+            <Modal.Body>
+                <h4>Book Title</h4>
+                <input type="text" name="editBookTitleInput" id="editBookTitleInput" autoComplete="off" size="80" defaultValue={booktitle} />
+                <Button variant="secondary" onClick={SubmitEditedTitle}>Change Title</Button>
+                <br />
+                <br />
+                <textarea
+                    id="editBlurb"
+                    name="editBlurb"
+                    defaultValue={blurb}
+                    onChange={(value)=>{blurb=value}}
+                    rows="10"
+                    cols="80"
+                    resize="none"
+                    maxLength="2048"
+                />
+                <br />
+                <br />
+                <Formik
+                initialValues={{
+                    bookCover: {}
+                }}
+                onSubmit={
+                data => (
+                    SubmitCover(data)
+                )
+                }>
+                <Form>
+                {/* <DropZone
+                    name='bookCover'
+                    label='Cover upload'
+                    placeholder='Upload your cover image (.JPEG and .PNG only, ideal dimensions: 800px w, 1200px h). Maximum file size: 3MB'
+                    accept="image/png, image/jpeg, image/jpg"
+                    multiple={false}
+                    required={true}
+                    maxSize={3145728}
+                    onDropRejected={() => {
+                        alert("File Rejected! Please upload a suitable file.")
+                    }}
+                    onDropAccepted={(acceptedFiles) => getBase64(acceptedFiles[0])}
+                >
+                </DropZone>
+                <SubmitBtn id='editCoverBtn' text="Submit New Cover"/> */}
+                </Form>
+                </Formik>
+                <div id="bookid" hidden>{bookid}</div>
+            </Modal.Body>
+            <Modal.Footer Style="background-color: #d7d7d7">
+                <Button variant="secondary" onClick={handleCloseEditBook}>
                     Close
                 </Button>
             </Modal.Footer>

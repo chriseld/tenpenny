@@ -80,6 +80,7 @@ function PageNewBook() {
                 placeholder='Enter a short blurb to sell readers on your book!'
                 cols='50'
                 rows='5'
+                maxLength='2048'
             />
 
             <DropZone
