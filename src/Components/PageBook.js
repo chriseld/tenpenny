@@ -99,12 +99,13 @@ function displayText(title, text, id, chapter) {
     idchapters = id;
     title = new Buffer.from(title).toString();
     text = new Buffer.from(text).toString();
-    document.getElementById("content").innerHTML = text;
 
     currentchapter = chapter;
 
     chaptertitle = dirtyHtml(title);
     chaptertext = text;
+
+    document.getElementById("content").innerHTML = "<h4>" + currentchapter + " - " + title + "</h4>" + text;
 }
 
 function escapeHtml(unsafe) {
