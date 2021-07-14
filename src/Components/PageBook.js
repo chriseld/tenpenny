@@ -82,7 +82,7 @@ function GetChapters(id) {
     return (
       <>
         {data.map(item => (
-            <a href="#" key={item.chapternumber} onClick={ () => displayText(item.chaptertitle, item.chaptertext, item.idchapters, item.chapternumber) }>{item.chapternumber} - {item.chaptertitle}</a>
+            <a href="#" key={item.chapternumber} onClick={ () => displayText(item.chaptertitle, item.chaptertext, item.idchapters, item.chapternumber) }>{item.chapternumber} - {dirtyHtml(item.chaptertitle)}</a>
         ))}
       </>
     )};
@@ -103,7 +103,7 @@ function displayText(title, text, id, chapter) {
 
     currentchapter = chapter;
 
-    chaptertitle = title;
+    chaptertitle = dirtyHtml(title);
     chaptertext = text;
 }
 
@@ -112,6 +112,12 @@ function escapeHtml(unsafe) {
          .replace(/&/g, "&amp;")
          .replace(/</g, "&lt;")
          .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+
+ function stripQuotes(unsafe) {
+    return unsafe
          .replace(/"/g, "&quot;")
          .replace(/'/g, "&#039;");
  }
@@ -131,7 +137,7 @@ async function SubmitNewChapter() {
     console.log(rawText);
     const rawTitle = document.getElementById("newChapterTitle").value;
     const cleanTitle = escapeHtml(rawTitle);
-    const cleanText = rawText;
+    const cleanText = stripQuotes(rawText);
 
     await axios.post('http://localhost:9000/addnewchapter?bookid=' + bookid + '&chapternum=' + chapternumber, {
         chaptertitle: cleanTitle,
