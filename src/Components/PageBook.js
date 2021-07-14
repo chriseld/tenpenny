@@ -41,7 +41,7 @@ async function getBook(id) {
             cover = atob(cover);
             document.getElementById("coverImg").src = cover;
             if(document.getElementById("content").innerHTML === "") {
-                blurb = response.data[0].blurb;
+                blurb = dirtyHtml(response.data[0].blurb);
                 document.getElementById("content").innerHTML = blurb;
             }
             authid = response.data[0].idauthor;
@@ -210,6 +210,17 @@ async function SubmitEditedTitle() {
       });
 }
 
+async function SubmitEditedBlurb() {
+    const rawBlurb = document.getElementById("editBlurb").value;
+    const cleanBlurb = stripQuotes(rawBlurb);
+
+    await axios.post('http://localhost:9000/editbookblurb?idbooks=' + bookid, {
+        blurb: cleanBlurb
+      }).then(function (response) {
+        alert("Your blurb has been edited!");
+      });
+}
+
 function OnLoad() {
     const { search } = useLocation();
     const values = queryString.parse(search);
@@ -346,6 +357,8 @@ function OnLoad() {
                     resize="none"
                     maxLength="2048"
                 />
+                <br />
+                <Button variant="secondary" onClick={SubmitEditedBlurb}>Change Blurb</Button>
                 <br />
                 <br />
                 <Formik
