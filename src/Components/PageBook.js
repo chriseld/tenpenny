@@ -195,8 +195,17 @@ function getBase64(file) {
     })
 }
 
-function SubmitCover(file) {
-    console.log(file);
+async function SubmitCover(data) {
+    if(encodedCover.length > 0) {
+    const cover = encodedCover;
+    await axios.post('http://localhost:9000/editbookcover?idbooks=' + bookid, {
+        cover: cover
+      }).then(function (response) {
+        alert("Your cover has been edited!");
+      });
+    } else {
+        alert("You must choose an image first!")
+    }
 }
 
 async function SubmitEditedTitle() {
@@ -371,13 +380,12 @@ function OnLoad() {
                 )
                 }>
                 <Form>
-                {/* <DropZone
+                <DropZone
                     name='bookCover'
                     label='Cover upload'
                     placeholder='Upload your cover image (.JPEG and .PNG only, ideal dimensions: 800px w, 1200px h). Maximum file size: 3MB'
                     accept="image/png, image/jpeg, image/jpg"
                     multiple={false}
-                    required={true}
                     maxSize={3145728}
                     onDropRejected={() => {
                         alert("File Rejected! Please upload a suitable file.")
@@ -385,7 +393,7 @@ function OnLoad() {
                     onDropAccepted={(acceptedFiles) => getBase64(acceptedFiles[0])}
                 >
                 </DropZone>
-                <SubmitBtn id='editCoverBtn' text="Submit New Cover"/> */}
+                <SubmitBtn id='editCoverBtn' text="Submit New Cover"/>
                 </Form>
                 </Formik>
                 <div id="bookid" hidden>{bookid}</div>
