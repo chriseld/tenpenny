@@ -6,10 +6,16 @@ import { Form, DropZone, Input, Textarea, SubmitBtn } from 'react-formik-ui';
 
 let encodedCover = "";
 
+function stripQuotes(unsafe) {
+    return unsafe
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 async function SubmitBook(data) {
     const authid = data.authorId;
-    const title = data.bookTitle;
-    const blurb = data.bookBlurb;
+    const title = stripQuotes(data.bookTitle);
+    const blurb = stripQuotes(data.bookBlurb);
     const cover = encodedCover;
     let bookid = 0;
     bookid = await axios.post('http://localhost:9000/addbook', {

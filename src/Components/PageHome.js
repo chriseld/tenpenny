@@ -40,7 +40,16 @@ function GetBlurb(blurb) {
     if(blurb.length > 65) {
         blurb = blurb.substring(0, 65) + "...";
     }
-    return blurb;
+    return dirtyHtml(blurb);
+}
+
+function dirtyHtml(safe) {
+    return safe
+    .replace("&amp;", "&")
+    .replace("&lt;", "<")
+    .replace("&gt;", ">")
+    .replace("&quot;", '"')
+    .replace("&#039;", "'");
 }
 
 function GetBooks() {
@@ -65,7 +74,7 @@ function GetBooks() {
             <Card key={item.idbooks} Style="Width: 200px; background-color: #D7D7D7; box-shadow: 5px 5px 15px 2px rgba(0,0,0,0.69); display: inline-block; margin: 15px;">
                 <Card.Img className="text-center mx-auto" Style="margin: 0 25px; border: 1px solid black" variant="top" src={GetCover(item.cover)} />
                 <Card.Body>
-                    <Card.Title>{item.title}</Card.Title>
+                    <Card.Title>{dirtyHtml(item.title)}</Card.Title>
                     <Card.Text>
                         <em>by {item.username}</em>
                         <br />

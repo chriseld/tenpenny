@@ -10,13 +10,13 @@ router.all('/', function(req, res, next) {
 
     con.query("DELETE from books WHERE idbooks = " + idbooks, function (err, result, fields) {
         if (err) console.log(err);
-        res.send(result);
     })
 
     con.query("DELETE from chapters WHERE idbooks = " + idbooks, function (err, result, fields) {
         if (err) console.log(err);
-        res.send(result);
     })
+
+    res.send("ok");
     }
 });
 

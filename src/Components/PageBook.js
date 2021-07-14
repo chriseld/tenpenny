@@ -230,6 +230,18 @@ async function SubmitEditedBlurb() {
       });
 }
 
+async function deleteBook() {
+    const deleteconfirm = window.confirm("Are you SURE you want to delete this? It cannot be undone")
+    if(deleteconfirm === true) {
+    await axios.post('http://localhost:9000/deletebook?idbooks=' + bookid, {
+        authid: authid
+      }).then(function (response) {
+        alert("Your book has been deleted!");
+        window.location.replace("/");
+      });
+    }
+}
+
 function OnLoad() {
     const { search } = useLocation();
     const values = queryString.parse(search);
@@ -396,6 +408,9 @@ function OnLoad() {
                 <SubmitBtn id='editCoverBtn' text="Submit New Cover"/>
                 </Form>
                 </Formik>
+                <hr />
+                <h5>Danger Zone!</h5>
+                <Button variant="danger" id="deleteBookBtn" onClick={deleteBook}>Delete Book</Button>
                 <div id="bookid" hidden>{bookid}</div>
             </Modal.Body>
             <Modal.Footer Style="background-color: #d7d7d7">
